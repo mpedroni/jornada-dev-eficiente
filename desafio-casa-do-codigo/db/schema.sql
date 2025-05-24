@@ -1,0 +1,10 @@
+-- db: sqlite3
+
+CREATE TABLE IF NOT EXISTS "authors" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "name" TEXT NOT NULL,
+  "email" TEXT NOT NULL,
+  "description" TEXT,
+  "created_at" DATETIME DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" DATETIME DEFAULT CURRENT_TIMESTAMP
+);

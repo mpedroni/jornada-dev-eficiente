@@ -1,0 +1,9 @@
+# create an author
+POST http://localhost:8080/authors
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@doe.com",
+  "description": "A passionate writer and tech enthusiast."
+}
