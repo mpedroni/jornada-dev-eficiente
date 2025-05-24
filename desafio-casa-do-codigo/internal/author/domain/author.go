@@ -1,4 +1,4 @@
-package author
+package domain
 
 import (
 	"errors"
@@ -56,6 +56,10 @@ func (a Author) ID() int {
 	return a.id
 }
 
+func (a *Author) SetID(id int) {
+	a.id = id
+}
+
 func (a Author) Name() string {
 	return a.name
 }
@@ -70,4 +74,8 @@ func (a Author) Description() string {
 
 func (a Author) CreatedAt() time.Time {
 	return a.createdAt
+}
+
+func (a Author) UpdatedAt() time.Time {
+	return a.updatedAt
 }

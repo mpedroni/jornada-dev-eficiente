@@ -3,17 +3,18 @@ package author
 import (
 	"context"
 	"database/sql"
+	"desafiocdc/internal/author/domain"
 )
 
-type AuthorRepository struct {
+type SqliteAuthorRepository struct {
 	db *sql.DB
 }
 
-func (ar *AuthorRepository) Save(ctx context.Context, a *Author) error {
+func (ar SqliteAuthorRepository) Save(ctx context.Context, a *domain.Author) error {
 	result, err := ar.db.ExecContext(
 		ctx,
 		"INSERT INTO authors (name, email, description, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
-		a.name, a.email, a.description, a.createdAt, a.updatedAt)
+		a.Name(), a.Email(), a.Description(), a.CreatedAt(), a.UpdatedAt())
 	if err != nil {
 		return err
 	}
@@ -23,7 +24,7 @@ func (ar *AuthorRepository) Save(ctx context.Context, a *Author) error {
 		return err
 	}
 
-	a.id = int(id)
+	a.SetID(int(id))
 
 	return nil
 }

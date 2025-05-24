@@ -1,6 +1,7 @@
 package author
 
 import (
+	"desafiocdc/internal/author/domain"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -8,7 +9,7 @@ import (
 )
 
 type authorHandler struct {
-	repo AuthorRepository
+	repo domain.AuthorRepository
 }
 
 func (h *authorHandler) CreateAuthor(w http.ResponseWriter, r *http.Request) {

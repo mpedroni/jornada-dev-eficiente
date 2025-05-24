@@ -1,6 +1,7 @@
 package author
 
 import (
+	"desafiocdc/internal/author/domain"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -43,8 +44,8 @@ type CreateAuthorRequest struct {
 	Description string `json:"description"`
 }
 
-func (r CreateAuthorRequest) toModel() (Author, error) {
-	return NewAuthor(r.Name, r.Email, r.Description)
+func (r CreateAuthorRequest) toModel() (domain.Author, error) {
+	return domain.NewAuthor(r.Name, r.Email, r.Description)
 }
 
 type CreateAuthorResponse struct {
@@ -55,7 +56,7 @@ type CreateAuthorResponse struct {
 	CreatedAt   string `json:"created_at"`
 }
 
-func CreateAuthorResponseFrom(a Author) CreateAuthorResponse {
+func CreateAuthorResponseFrom(a domain.Author) CreateAuthorResponse {
 	return CreateAuthorResponse{
 		ID:          a.ID(),
 		Name:        a.Name(),

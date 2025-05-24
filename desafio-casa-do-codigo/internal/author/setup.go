@@ -7,7 +7,7 @@ import (
 )
 
 func Setup(r *chi.Mux, db *sql.DB) {
-	repo := AuthorRepository{db: db}
+	repo := SqliteAuthorRepository{db: db}
 	handler := authorHandler{repo: repo}
 
 	registerRoutes(r, handler)
