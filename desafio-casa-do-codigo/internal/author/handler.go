@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 )
 
 type authorHandler struct {
@@ -15,31 +14,25 @@ type authorHandler struct {
 func (h *authorHandler) CreateAuthor(w http.ResponseWriter, r *http.Request) {
 	var req CreateAuthorRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		ResponseError(w, NewHttpError(http.StatusBadRequest, err))
 		return
 	}
 
 	author, err := req.toModel()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-
+		BadRequest(w, err)
+		return
 	}
 
 	if err := h.repo.Save(r.Context(), &author); err != nil {
 		log.Default().Println(fmt.Errorf("saving author: %w", err))
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		InternalServerError(w, err)
+		return
 	}
 
-	body := map[string]any{
-		"id":          author.id,
-		"name":        author.name,
-		"email":       author.email,
-		"description": author.description,
-		"createdAt":   author.createdAt.Format(time.RFC3339),
-	}
-
-	if err := json.NewEncoder(w).Encode(body); err != nil {
+	if err := json.NewEncoder(w).Encode(CreateAuthorResponseFrom(author)); err != nil {
 		log.Default().Println(fmt.Errorf("encoding response body: %w", err))
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		InternalServerError(w, err)
+		return
 	}
 }
