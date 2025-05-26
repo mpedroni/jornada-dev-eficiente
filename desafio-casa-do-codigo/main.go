@@ -2,6 +2,7 @@ package main
 
 import (
 	"desafiocdc/internal/author"
+	"desafiocdc/pkg/database/sqlite"
 	"log"
 	"net/http"
 
@@ -13,14 +14,14 @@ import (
 
 func main() {
 	log.Default().Println("opening db")
-	db, err := openDB()
+	db, err := sqlite.OpenDB("file:tmp/db.sqlite")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
 	log.Default().Println("running migrations")
-	if err := migrate(db); err != nil {
+	if err := sqlite.Migrate(db, "db/schema.sql"); err != nil {
 		log.Fatal(err)
 	}
 
