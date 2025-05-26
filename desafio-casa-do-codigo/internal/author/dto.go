@@ -38,6 +38,10 @@ func InternalServerError(w http.ResponseWriter, err error) {
 	ResponseError(w, NewHttpError(http.StatusInternalServerError, err))
 }
 
+func Conflict(w http.ResponseWriter, err error) {
+	ResponseError(w, NewHttpError(http.StatusConflict, err))
+}
+
 type CreateAuthorRequest struct {
 	Name        string `json:"name"`
 	Email       string `json:"email"`

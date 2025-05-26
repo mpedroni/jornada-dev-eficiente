@@ -3,6 +3,7 @@ package author
 import (
 	"desafiocdc/internal/author/domain"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,6 +23,17 @@ func (h *authorHandler) CreateAuthor(w http.ResponseWriter, r *http.Request) {
 	author, err := req.toModel()
 	if err != nil {
 		BadRequest(w, err)
+		return
+	}
+
+	possibleAuthor, err := h.repo.FindByEmail(r.Context(), req.Email)
+	if err != nil && !errors.Is(err, domain.ErrAuthorNotFound) {
+		InternalServerError(w, err)
+		return
+	}
+
+	if possibleAuthor.IsPersisted() {
+		Conflict(w, fmt.Errorf("there is already an author registered with the email %s", req.Email))
 		return
 	}
 
