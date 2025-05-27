@@ -2,6 +2,7 @@ package main
 
 import (
 	"desafiocdc/internal/author"
+	"desafiocdc/internal/category"
 	"desafiocdc/pkg/database/sqlite"
 	"log"
 	"net/http"
@@ -31,6 +32,7 @@ func main() {
 	r.Use(middleware.AllowContentType("application/json"))
 
 	author.Setup(r, db)
+	category.Setup(r, db)
 
 	log.Default().Println("staring server on port 8080")
 	if err := http.ListenAndServe(":8080", r); err != http.ErrServerClosed {

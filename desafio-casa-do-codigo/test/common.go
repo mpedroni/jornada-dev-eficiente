@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func getTestDB() (*sql.DB, error) {
+func openTestDB() (*sql.DB, error) {
 	db, err := sqlite.OpenDB(":memory:")
 	if err != nil {
 		return nil, err
@@ -28,11 +28,13 @@ func getTestDB() (*sql.DB, error) {
 }
 
 func cleanupDB(t *testing.T, db *sql.DB) {
+	t.Helper()
+
 	_, err := db.Exec(`
 		BEGIN TRANSACTION;
 
 		DELETE FROM authors;
-		DELETE FROM sqlite_sequence WHERE name = 'authors';
+		DELETE FROM categories;
 
 		COMMIT;
 	`)
@@ -42,7 +44,7 @@ func cleanupDB(t *testing.T, db *sql.DB) {
 	}
 }
 
-func performRequest(r *chi.Mux, method, path string, body interface{}) *httptest.ResponseRecorder {
+func performRequest(r *chi.Mux, method, path string, body any) *httptest.ResponseRecorder {
 	req, err := http.NewRequest(method, path, nil)
 	if err != nil {
 		panic(err)

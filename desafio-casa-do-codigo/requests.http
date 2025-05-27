@@ -7,3 +7,13 @@ Content-Type: application/json
   "email": "john@doe.com",
   "description": "A passionate writer and tech enthusiast."
 }
+
+###
+
+# create a category
+POST http://localhost:8080/categories
+Content-Type: application/json
+
+{
+  "name": "Fantasy",
+}

@@ -12,7 +12,7 @@ import (
 )
 
 func TestCreateAuthorHandler(t *testing.T) {
-	db, err := getTestDB()
+	db, err := openTestDB()
 	assert.Nil(t, err)
 	defer db.Close()
 
